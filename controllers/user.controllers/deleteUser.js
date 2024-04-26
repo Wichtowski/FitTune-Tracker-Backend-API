@@ -1,38 +1,34 @@
 const User = require('../../database/models/user.model/User');
 const bcrypt = require('bcryptjs');
-errorMessage = {
-    passwordCheck: 'Password is incorrect.',
-    emptyFields: 'Please enter all required fields.',
-    userNotFound: 'User not found!',
-    confDelete: 'Please confirm deletion.',
-};
+const { errorMessages } = require('../../helpers/errorMessages');
+const { successMessages } = require('../../helpers/successMessages');
+
 
 const deleteUser = async (req, res, next) => {
     const { email, password, confDelete } = req.body;
     try {
         const user = await User.findOne({ email: email });
         if (!user) {
-            return res.status(404).json({ id: 8, message: errorMessage.userNotFound });
+            return res.status(404).json({  message: errorMessages.userNotFound });
         }
         const passwordCheck = await bcrypt.compare(password, user.password);
         if (passwordCheck === false) {
-            return res.status(400).json({ id: 9, message: errorMessage.passwordCheck });
+            return res.status(400).json({ message: errorMessages.passwordCheck });
         }
 
         if (confDelete === false) {
-            return res.status(400).json({ id: 10, message: errorMessage.confDelete });
+            return res.status(400).json({ message: errorMessages.confDelete });
         }
 
         const result = await User.deleteOne({ email: email });
         if (result.deletedCount === 0) {
-            return res.status(404).json({ id: 11, message: errorMessage.userNotFound });
+            return res.status(404).json({ message: errorMessages.userNotFound });
         }
 
-        res.status(201).json({ message: 'User account deleted successfully' });
+        res.status(201).json({ message: successMessages.userDeleted });
         next();
     } catch (err) {
-        console.error(err);
-        res.status(500).send('Error while deleting user!', err.message);
+        res.status(500).json({ message: `${ new Date() }\n`, error: err });
     }
 };
 

@@ -1,16 +1,8 @@
 const User = require('../../database/models/user.model/User');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const errorMessage = {
-    emailInUse: 'Email already in use!',
-    usernameInUse: 'Username already in use!',
-    emptyFields: 'Please enter all required fields.',
-    passwdLength: 'Password must be at least 6 characters long.',
-    passwdToUpper: 'Password must contain at least one uppercase letter.',
-    usernameInPasswd: 'Password must not contain username.',
-    specialCharInPasswd: 'Password must contain at least one special character.',
-    passwdMatch: 'Passwords do not match.',
-};
+const { errorMessages } = require('../../helpers/errorMessages');
+const { successMessages } = require('../../helpers/successMessages');
 
 const handleNewUser = async (req, res, next) => {
     const { username, email, password, confPasswd, name, surname, birthdate } = req.body;
@@ -21,35 +13,35 @@ const handleNewUser = async (req, res, next) => {
         const hasSpecialCharacter = /[!@#$%^&*()_+{}\[\]:;<>,.?~]/.test(password);
 
         if (emailDuplicate) {
-            return res.status(400).json({ id: 0, message: errorMessage.emailInUse });
+            return res.status(400).json({ message: errorMessages.emailInUse });
         }
 
         if (usernameDuplicate) {
-            return res.status(400).json({ id: 1, message: errorMessage.usernameInUse });
+            return res.status(400).json({ message: errorMessages.usernameInUse });
         }
 
         if (!username || !email || !password || !confPasswd) {
-            return res.status(400).json({ id: 2, message: errorMessage.emptyFields });
+            return res.status(400).json({ message: errorMessages.emptyFields });
         }
 
         if (password.length < 6) {
-            return res.status(400).json({ id: 3, message: errorMessage.passwdLength });
+            return res.status(400).json({ message: errorMessages.passwdLength });
         }
 
         if (password.toLowerCase() === password) {
-            return res.status(400).json({ id: 4, message: errorMessage.passwdToUpper });
+            return res.status(400).json({ message: errorMessages.passwdToUpper });
         }
 
         if (password.toLowerCase().includes(username.toLowerCase())) {
-            return res.status(400).json({ id: 5, message: errorMessage.usernameInPasswd });
+            return res.status(400).json({ message: errorMessages.usernameInPasswd });
         }
 
         if (!hasSpecialCharacter) {
-            return res.status(400).json({ id: 6, message: errorMessage.specialCharInPasswd });
+            return res.status(400).json({ message: errorMessages.specialCharInPasswd });
         }
 
         if (password != confPasswd) {
-            return res.status(400).json({ id: 7, message: errorMessage.passwdMatch });
+            return res.status(400).json({ message: errorMessages.passwdMatch });
         }
 
         const hashedPassword = await bcrypt.hash(password, 10);
@@ -65,11 +57,11 @@ const handleNewUser = async (req, res, next) => {
             sessions: [{ token: token, loginDate: new Date() }],
         });
 
-        res.status(201).json(result);
+        res.status(201).json({ message: successMessages.userCreated 
+        });
         next();
     } catch (err) {
-        console.error(err);
-        res.status(500).send('Error creating user!', err.message);
+        res.status(500).json({ message: `${ new Date() } ${ errorMessages.exerciseCreatingError }`, error: err.message});
     }
 };
 /*
