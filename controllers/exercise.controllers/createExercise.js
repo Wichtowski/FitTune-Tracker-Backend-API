@@ -1,13 +1,8 @@
 const Exercise = require('../../database/models/exercise.model/Exercise');
 const rateLimit = require("express-rate-limit");
+const { errorMessages } = require('../../helpers/errorMessages');
+const { successMessages } = require('../../helpers/successMessages');
 require("dotenv").config();
-
-errorMessages = {
-    missingParameters: "Missing parameters",
-    invalidParameters: "Invalid parameters",
-    exerciseExists: "Exercise already exists",
-    databaseError: "Database error"
-};
 
 const limiter = rateLimit({
     windowMs: 60 * 60 * 1000,
@@ -17,24 +12,21 @@ const limiter = rateLimit({
 
 const createExercise = async (req, res, next) => {
     const { exerciseName, exerciseYtVideoID, exerciseMuscleGroup, exerciseEquipment, exerciseDifficulty, creationKey} = req.body;
-    
-    const uniqueExercise = await Exercise.findOne({ exerciseName: exerciseName });
-    if (uniqueExercise) {
-        return res.status(400).json({ id: 12, message: errorMessages.exerciseExists });
-    }
-    if (!exerciseName || !exerciseYtVideoID || !exerciseMuscleGroup || !exerciseEquipment || !exerciseDifficulty) {
-        return res.status(400).json({ id: 13, message: errorMessages.missingParameters });
-    }
-    
-    if (exerciseName.length < 1 || exerciseYtVideoID.length < 1 || exerciseMuscleGroup.length < 1 || exerciseEquipment.length < 1 || exerciseDifficulty.length < 1) {
-        return res.status(400).json({ id: 14, message: errorMessages.invalidParameters });
-    }
-
-    if (creationKey != process.env.SPECIAL_CREATION_STRING ) {
-        return res.status(500).json({ id: 15, message: errorMessages.databaseError });
-    }
-
     try {
+    
+        const uniqueExercise = await Exercise.findOne({ exerciseName: exerciseName });
+        if (uniqueExercise) {
+            return res.status(400).json({ message: errorMessages.exerciseExists });
+        }
+
+        if (!exerciseName || !exerciseYtVideoID || !exerciseMuscleGroup || !exerciseEquipment || !exerciseDifficulty) {
+            return res.status(400).json({ message: errorMessages.emptyFields });
+        }
+
+        if (creationKey != process.env.CREATION_STRING ) {
+            return res.status(500).json({ message: errorMessages.databaseError });
+        }
+
         const exercise = await Exercise.create({
             exerciseName: exerciseName,
             exerciseYtVideoID: exerciseYtVideoID,
@@ -42,12 +34,13 @@ const createExercise = async (req, res, next) => {
             exerciseEquipment: exerciseEquipment,
             exerciseDifficulty: exerciseDifficulty
         });
+
         await exercise.save();
-        res.status(201).json({ message: 'Exercise created successfully' });
+        res.status(201).json({ message: successMessages.exerciseCreated });
         next();
     } catch (err) {
         console.error(err);
-        res.status(500).json({ message: 'Error while creating exercise!', error: err.message});
+        res.status(500).json({ message: `${ new Date() } ${ errorMessages.exerciseError }`, error: err.message });
     }
 }
 
