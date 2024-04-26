@@ -1,18 +1,9 @@
 const { Playlist, User, Exercise } = require('../../database/index');
 const { Types: { ObjectId } } = require('mongoose');
-
+const { errorMessages } = require('../../helpers/errorMessages');
+const { successMessages } = require('../../helpers/successMessages');
 require('dotenv').config();
 
-errorMessages = {
-    emptyFields: 'Please enter all required fields.',
-    invalidParameters: 'Invalid parameters',
-    playlistExists: 'Playlist already exists',
-    databaseError: 'Database error',
-    exerciseNotExists: 'Exercise does not exist',
-    usernameExists: 'User does not exist',
-    detailsInRequest: 'Details should not be included in request.',
-    moreThanOneExercise: 'Only one exercise can be added while creating new playlist.'
-};
 
 const createPlaylist = async (req, res) => {
     try {
@@ -24,7 +15,7 @@ const createPlaylist = async (req, res) => {
         }
 
         if (exercises.length > 1) {
-            return res.status(400).json({ message: errorMessages.moreThanOneExercise });
+            return res.status(400).json({ message: errorMessages.exerciseMoreThanOne });
         }
         
         const exerciseID = exercises[0].exerciseID;
@@ -47,23 +38,23 @@ const createPlaylist = async (req, res) => {
             return res.status(400).json({ message: errorMessages.detailsInRequest })
         }
 
-        if (creationKey != process.env.SPECIAL_CREATION_STRING) {
+        if (creationKey != process.env.CREATION_STRING) {
             return res.status(500).json({ message: errorMessages.databaseError });
         }
 
 
-        // const newPlaylist = await Playlist.create({
-        //         playlistName,
-        //         usernameID: usernameID,
-        //         playlistDescription,
-        //         exercises,
-        //         unit,
-        //     });
-        // await newPlaylist.save();
-        res.status(201).json({ message: 'Playlist created successfully' });
+        const newPlaylist = await Playlist.create({
+                playlistName,
+                usernameID: usernameID,
+                playlistDescription,
+                exercises,
+                unit,
+            });
+        await newPlaylist.save();
+        res.status(201).json({ message: successMessages.playlistCreated });
     } catch (err) {
         console.error(err);
-        res.status(500).json({ message:'Error while creating exercise!', error: err.message });
+        res.status(500).json({ message: `${ new Date() } ${ errorMessages.exerciseCreatingError }`, error: err.message });
     }
 };
 
