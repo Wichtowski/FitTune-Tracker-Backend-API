@@ -1,6 +1,6 @@
 const Exercise = require('../../database/models/exercise.model/Exercise');
-const { errorMessages } = require('../../helpers/errorMessages');
-const { successMessages } = require('../../helpers/successMessages');
+const errorMessages = require('../../helpers/errorMessages');
+const successMessages = require('../../helpers/successMessages');
 
 require("dotenv").config();
 
@@ -34,7 +34,7 @@ const editExercise = async (req, res, next) => {
         res.status(201).json({ message: successMessages.exerciseModified });
         next();
     } catch (err) {
-        console.error(err);
+        
         res.status(500).json({ message: `${ new Date() } ${ errorMessages.exerciseCreatingError }`, error: err.message});
     }
 };

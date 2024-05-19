@@ -1,25 +1,18 @@
 const Exercise = require('../../database/models/exercise.model/Exercise');
-const rateLimit = require("express-rate-limit");
-const { errorMessages } = require('../../helpers/errorMessages');
-const { successMessages } = require('../../helpers/successMessages');
+const errorMessages = require('../../helpers/errorMessages');
+const successMessages = require('../../helpers/successMessages');
 require("dotenv").config();
 
-const limiter = rateLimit({
-    windowMs: 60 * 60 * 1000,
-    max: 5,
-    message: "Too many requests from this IP, please try again later"
-});
-
-const createExercise = async (req, res, next) => {
-    const { exerciseName, exerciseYtVideoID, exerciseMuscleGroup, exerciseEquipment, exerciseDifficulty, creationKey} = req.body;
+const createExercise = async (req, res) => {
+    const { name, ytVideoID, muscleGroup, equipment, difficulty, creationKey} = req.body;
     try {
     
-        const uniqueExercise = await Exercise.findOne({ exerciseName: exerciseName });
+        const uniqueExercise = await Exercise.findOne({ name: name });
         if (uniqueExercise) {
             return res.status(400).json({ message: errorMessages.exerciseExists });
         }
 
-        if (!exerciseName || !exerciseYtVideoID || !exerciseMuscleGroup || !exerciseEquipment || !exerciseDifficulty) {
+        if (!name || !ytVideoID || !muscleGroup || !equipment || !difficulty) {
             return res.status(400).json({ message: errorMessages.emptyFields });
         }
 
@@ -27,21 +20,19 @@ const createExercise = async (req, res, next) => {
             return res.status(500).json({ message: errorMessages.databaseError });
         }
 
-        const exercise = await Exercise.create({
-            exerciseName: exerciseName,
-            exerciseYtVideoID: exerciseYtVideoID,
-            exerciseMuscleGroup: exerciseMuscleGroup,
-            exerciseEquipment: exerciseEquipment,
-            exerciseDifficulty: exerciseDifficulty
+        await Exercise.create({
+            name,
+            ytVideoID,
+            muscleGroup,
+            equipment,
+            difficulty
         });
 
-        await exercise.save();
         res.status(201).json({ message: successMessages.exerciseCreated });
-        next();
     } catch (err) {
-        console.error(err);
-        res.status(500).json({ message: `${ new Date() } ${ errorMessages.exerciseError }`, error: err.message });
+        
+        res.status(500).json({ message: errorMessages.exerciseError, error: err.message });
     }
 }
 
-module.exports = { createExercise, limiter };
+module.exports = { createExercise };
