@@ -1,22 +1,21 @@
+const { isValid, ObjectId } = require('mongoose').Types;
 const { Playlist, Exercise, User } = require('../../database/index');
-const {  Types: { ObjectId } } = require('mongoose');
-
 const successMessages = require('../../helpers/successMessages');
 const errorMessages = require('../../helpers/errorMessages');
 
 const addExerciseToPlaylist = async (req, res) => {
-    const { playlistID, exerciseID, usernameID } = req.body;
+    const { playlistID, exerciseID, userID, token } = req.body;
     try {
-        if (!playlistID || !exerciseID || !usernameID) {
+        if (!playlistID || !exerciseID || !userID) {
             return res.status(400).json({ message: errorMessages.emptyFields });
         }
 
-        if (!ObjectId.isValid(exerciseID) || !ObjectId.isValid(playlistID) || !ObjectId.isValid(usernameID)) {
+        if (!ObjectId.isValid(exerciseID) || !ObjectId.isValid(playlistID) || !ObjectId.isValid(userID)) {
             return res.status(500).json({ message: errorMessages.databaseError });
         }
 
-        const usernameExists = await User.findOne({ _id: usernameID });
-        if (!usernameExists) {
+        const user = await User.findOne({ _id: userID });
+        if (!user) {
             return res.status(404).json({ message: errorMessages.userNotFound });
         }
 
@@ -29,14 +28,13 @@ const addExerciseToPlaylist = async (req, res) => {
         if (!exerciseExists) {
             return res.status(404).json({ message: errorMessages.exerciseNotExists });
         }
+        const newID = new ObjectId();
 
-        const exercise = await Exercise.findOne({ _id: exerciseID });
-
-        await Playlist.updateOne({ _id: playlistID }, { $push: { exercises: exercise } });
+        await Playlist.updateOne({ _id: playlistID }, { $push: { exercises: { _id: newID, exerciseID: exerciseExists._id } } });
 
         res.status(201).json({ message: successMessages.exerciseAddedToPlaylist });
     } catch (err) {
-        res.status(500).json({ message: `${new Date()} ${errorMessages.exerciseAddingError}`, error: err.message });
+        res.status(500).json({ message: errorMessages.exerciseAddingError, error: err.message });
     }
 };
 
