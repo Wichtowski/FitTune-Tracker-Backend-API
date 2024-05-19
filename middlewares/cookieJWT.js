@@ -2,7 +2,7 @@ const jwt = require('jsonwebtoken');
 const errorMessages = require('../helpers/errorMessages');
 
 const cookieJWT = async (req, res, next) => {
-    const token = req.cookies.token;
+    const token = req.cookies.token || req.headers['authorization'];
     try {
         if (!token) {
             return res.status(401).json({ error: "Unauthorized" }); 
