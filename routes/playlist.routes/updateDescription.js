@@ -1,8 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const updateDescriptionPlaylist = require('../../controllers/playlist.controllers/updateDescriptionPlaylist').updateDescriptionPlaylist;
-const cookieJWT = require('../../middlewares/cookieJWT');
+const updateDescription =  require('../../controllers/playlist.controllers/updateDescription').updateDescription;
 
-router.put('/', updateDescriptionPlaylist);
+router.put('/', updateDescription);
 
 module.exports = router;

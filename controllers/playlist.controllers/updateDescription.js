@@ -1,9 +1,9 @@
-const Playlist = require('../../models/playlist.model');
-const User = require('../../models/user.model');
+const Playlist = require('../../database/models/playlist.model');
+const User = require('../../database/models/user.model');
 const errorMessages = require('../../helpers/errorMessages');
 const successMessages = require('../../helpers/successMessages');
 
-const updateDescriptionPlaylist = async (req, res) => {
+const updateDescription = async (req, res) => {
     const { userID, playlistID, newPlaylistDescription } = req.body;
     try {
         if (!userID || !playlistID || !newPlaylistDescription) {
@@ -36,4 +36,4 @@ const updateDescriptionPlaylist = async (req, res) => {
     }
 }
 
-module.exports = { updateDescriptionPlaylist };
+module.exports = { updateDescription };
