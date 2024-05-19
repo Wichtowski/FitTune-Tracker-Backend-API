@@ -1,21 +1,19 @@
 const User = require('../../database/models/user.model/User');
 const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
-const { errorMessages } = require('../../helpers/errorMessages');
-const { successMessages } = require('../../helpers/successMessages');
+const errorMessages = require('../../helpers/errorMessages');
+const successMessages = require('../../helpers/successMessages');
+const signJWT = require('../../middlewares/signJWT');
 
 const handleNewUser = async (req, res, next) => {
     const { username, email, password, confPasswd, name, surname, birthdate } = req.body;
     try {
-        const emailDuplicate = await User.findOne({ email }).exec();
-
-        const usernameDuplicate = await User.findOne({ username }).exec();
-        const hasSpecialCharacter = /[!@#$%^&*()_+{}\[\]:;<>,.?~]/.test(password);
-
+                
+        const emailDuplicate = await User.findOne({ email });
         if (emailDuplicate) {
             return res.status(400).json({ message: errorMessages.emailInUse });
         }
-
+        
+        const usernameDuplicate = await User.findOne({ username });
         if (usernameDuplicate) {
             return res.status(400).json({ message: errorMessages.usernameInUse });
         }
@@ -35,7 +33,8 @@ const handleNewUser = async (req, res, next) => {
         if (password.toLowerCase().includes(username.toLowerCase())) {
             return res.status(400).json({ message: errorMessages.usernameInPasswd });
         }
-
+        
+        const hasSpecialCharacter = /[!@#$%^&*()_+{}\[\]:;<>,.?~]/.test(password);
         if (!hasSpecialCharacter) {
             return res.status(400).json({ message: errorMessages.specialCharInPasswd });
         }
@@ -45,7 +44,7 @@ const handleNewUser = async (req, res, next) => {
         }
 
         const hashedPassword = await bcrypt.hash(password, 10);
-        const token = jwt.sign({ email: email }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '3h' });
+        const token = signJWT()
 
         const result = await User.create({
             username: username,
@@ -57,8 +56,7 @@ const handleNewUser = async (req, res, next) => {
             sessions: [{ token: token, loginDate: new Date() }],
         });
 
-        res.status(201).json({ message: successMessages.userCreated 
-        });
+        res.status(201).json({ message: successMessages.userCreated });
         next();
     } catch (err) {
         res.status(500).json({ message: `${ new Date() } ${ errorMessages.exerciseCreatingError }`, error: err.message});

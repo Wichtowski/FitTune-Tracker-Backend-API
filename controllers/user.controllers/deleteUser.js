@@ -1,7 +1,7 @@
 const User = require('../../database/models/user.model/User');
 const bcrypt = require('bcryptjs');
-const { errorMessages } = require('../../helpers/errorMessages');
-const { successMessages } = require('../../helpers/successMessages');
+const errorMessages = require('../../helpers/errorMessages');
+const successMessages = require('../../helpers/successMessages');
 
 
 const deleteUser = async (req, res, next) => {
