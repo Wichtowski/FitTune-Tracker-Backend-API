@@ -2,31 +2,31 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
 const exerciseSchema = new Schema({
-    exerciseName: {
+    name: {
         type: String,
         required: true,
         minlength: 1,
         trim: true,
         unique: false
     },
-    exerciseYtVideoID: {
+    ytVideoID: {
         type: String,
         required: true,
         unique: true,
     },
-    exerciseMuscleGroup: {
+    muscleGroup: {
         type: String,
         required: true,
         minlength: 1,
         trim: true
     },
-    exerciseEquipment: {
+    equipment: {
         type: String,
-        required: true,
         minlength: 1,
-        trim: true
+        trim: true,
+        default: 'none',
     },
-    exerciseDifficulty: {
+    difficulty: {
         type: String,
         required: true,
         minlength: 1,

@@ -11,7 +11,7 @@ const playlistSchema = new Schema({
         trim: true,
         default: 'New Playlist'
     },
-    usernameID: {
+    userID: {
         type: mongoose.Schema.Types.ObjectId,
         ref: User,
         required: false,
@@ -58,6 +58,7 @@ const playlistSchema = new Schema({
         required: false,
         default: 'kgs'
     },
+    // change to be in cookies or local storage
 });
 
 module.exports = mongoose.model('playlist', playlistSchema);
