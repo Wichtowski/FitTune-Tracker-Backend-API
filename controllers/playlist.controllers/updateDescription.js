@@ -1,5 +1,5 @@
-const Playlist = require('../../database/models/playlist.model');
-const User = require('../../database/models/user.model');
+const Playlist = require('../../database/models/playlist.model/Playlist');
+const User = require('../../database/models/user.model/User');
 const errorMessages = require('../../helpers/errorMessages');
 const successMessages = require('../../helpers/successMessages');
 
