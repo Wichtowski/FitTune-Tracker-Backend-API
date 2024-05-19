@@ -5,7 +5,10 @@
     "playlistExists": "Playlist already exists",
     "playlistError": "Error while modifying playlist!",
     "playlistNotExists": "Playlist does not exist",
-
+    "exerciseNotExistsInPlaylist": "Exercise does not exist in playlist",
+    "playlistEditingError": "Error while editing playlist!",
+    "playlistUpdateError": "Error while updating playlist!",
+    
     "databaseError": "Database error",
 
     "exerciseModifyingError": "Error while modifying exercise!",
@@ -15,7 +18,11 @@
     "exerciseExists": "Exercise already exists",
     "exerciseAddingError": "Error while adding exercise to playlist!",
 
-    
+    "unauthorized": "Token authorization failed",
+    "sessionExpired": "Session is expired",
+    "cookieError": "Error while setting cookie",
+    "usersDontMatch": "Users do not match",
+
     "detailsInRequest": "Details should not be included in request.",
     "passwordCheck": "Password is incorrect.",
     "confDelete": "Please confirm deletion.",
@@ -27,6 +34,6 @@
     "emailInUse": "Email already in use!",
     "usernameInUse": "Username already in use!",
     "userNotFound": "User not found!",
-    "usernameExists": "User does not exist"
+    "userExists": "User does not exist"
 
 }

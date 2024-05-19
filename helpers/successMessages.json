@@ -2,9 +2,15 @@
     "exerciseModified": "Exercise modified successfully",
     "exerciseCreated": "Exercise created successfully",
     "exerciseAddedToPlaylist": "Exercise added to playlist",
+
     
     "playlistCreated": "Playlist created successfully",
+    "playlistDescriptionUpdated": "Playlist description updated successfully",
+    "playlistNameUpdated": "Playlist name updated successfully",
+    "exerciseRemovedFromPlaylist": "Exercise removed from playlist",
+
 
     "userCreated": "User created successfully",
+    "userLogged": "User logged in successfully",
     "userDeleted": "User account deleted successfully"
 }
