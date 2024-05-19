@@ -14,10 +14,9 @@ app.use('/fitTune-api/user/delete', require('./user.routes/delete'));
 app.use('/fitTune-api/user/login', require('./user.routes/login'));
 
 app.use('/fitTune-api/exercise/create', require('./exercise.routes/create'));
-app.use('/fitTune-api/exercise/edit', require('./exercise.routes/edit'));
+app.use('/fitTune-api/exercise/edit', require('./exercise.routes/edit')); 
 
 app.use('/fitTune-api/playlist/create', require('./playlist.routes/create'));
-// app.use('/fitTune-api/playlist/create/withExercise', require('./playlist.routes/create'));
 app.use('/fitTune-api/playlist/addExercise', require('./playlist.routes/add'));
 app.use('/fitTune-api/playlist/deleteExercise', require('./playlist.routes/deleteExercise'));
 app.use('/fitTune-api/playlist/updateDescriptionPlaylist', require('./playlist.routes/updateDescription'));
