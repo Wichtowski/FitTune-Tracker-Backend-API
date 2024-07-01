@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken');
 const errorMessages = require('../helpers/errorMessages');
+require('dotenv').config();
 
 const cookieJWT = async (req, res, next) => {
     const token = req.cookies.token || req.headers['authorization'];
@@ -7,12 +8,12 @@ const cookieJWT = async (req, res, next) => {
         if (!token) {
             return res.status(401).json({ error: "Unauthorized" }); 
         }
-            jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
+        jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
             if (err) {
                 console.log(err);
                 return res.status(403).json({ error: "Forbidden" });
             }
-            req.user = user;
+            res.user = user;
             next();
         });
     } catch (err) {
