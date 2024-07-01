@@ -12,5 +12,6 @@
 
     "userCreated": "User created successfully",
     "userLogged": "User logged in successfully",
-    "userDeleted": "User account deleted successfully"
+    "userDeleted": "User account deleted successfully",
+    "userAlreadyLogged": "User already logged in"
 }

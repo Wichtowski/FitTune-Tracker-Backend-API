@@ -1,6 +1,7 @@
 {
     "emptyFields": "Please enter all required fields.",
     "invalidParameters": "Invalid parameters",
+    "invalidObjectID": "Invalid object ID",
 
     "playlistExists": "Playlist already exists",
     "playlistError": "Error while modifying playlist!",
@@ -8,6 +9,9 @@
     "exerciseNotExistsInPlaylist": "Exercise does not exist in playlist",
     "playlistEditingError": "Error while editing playlist!",
     "playlistUpdateError": "Error while updating playlist!",
+    "invalidExerciseID": "Invalid exercise ID", 
+    "invalidIDsOrEmptyArray": "Invalid exercise IDs or empty array",
+
     
     "databaseError": "Database error",
 
