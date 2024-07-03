@@ -25,18 +25,18 @@ const logInUser = async (req, res, next) => {
             if (!passwordMatch) {
                 return res.status(400).json({ error: errorMessages.passwordCheck });
             }
-            const signedToken = await signJWT({ user: { username: user.username } }, process.env.ACCESS_TOKEN_SECRET);
+            const token = await signJWT({ user: { username: user.username } }, process.env.ACCESS_TOKEN_SECRET);
 
             user.sessions.push({
-                token: signedToken,
+                token: token,
                 loginDate: new Date(),
             });
             await user.save();
 
-            res.cookie('token', signedToken, { httpOnly: true, maxAge: 30 * 60 * 1000 });
-            res.status(200).json({ message: successMessages.userLogged, token: signedToken });
+            res.cookie('token', token, { httpOnly: true, maxAge: 30 * 60 * 1000 });
+            res.status(200).json({ message: successMessages.userLogged, token: token });
         } else {
-            return res.status(200).json({ message: successMessages.userAlreadyLogged });
+            return res.status(200).json({ message: successMessages.userAlreadyLogged, token: lastLogin });
         }
         next();
     } catch (err) {

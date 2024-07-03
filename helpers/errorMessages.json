@@ -38,6 +38,7 @@
     "emailInUse": "Email already in use!",
     "usernameInUse": "Username already in use!",
     "userNotFound": "User not found!",
-    "userExists": "User does not exist"
+    "userExists": "User does not exist",
+    "userError": "Error while creating user!"
 
 }

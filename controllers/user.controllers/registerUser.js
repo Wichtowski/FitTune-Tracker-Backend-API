@@ -44,7 +44,7 @@ const handleNewUser = async (req, res, next) => {
         }
 
         const hashedPassword = await bcrypt.hash(password, 10);
-        const token = signJWT()
+        const token = await signJWT({ user: { username: username } }, process.env.ACCESS_TOKEN_SECRET)
 
         const result = await User.create({
             username: username,
@@ -53,13 +53,17 @@ const handleNewUser = async (req, res, next) => {
             birthdate: birthdate,
             name: name,
             surname: surname,
-            sessions: [{ token: token, loginDate: new Date() }],
+            sessions: [{
+                token: token,
+                loginDate: new Date(),
+            }]
         });
+        await result.save();
 
-        res.status(201).json({ message: successMessages.userCreated });
+        res.status(201).json({ message: successMessages.userCreated, token: token});
         next();
     } catch (err) {
-        res.status(500).json({ message: `${ new Date() } ${ errorMessages.exerciseCreatingError }`, error: err.message});
+        res.status(500).json({ message: `${ new Date() } ${ errorMessages.userError }`, error: err.message});
     }
 };
 /*

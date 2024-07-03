@@ -9,7 +9,7 @@ router.get('^/$|/index(.html)?', (req, res) => {
     res.sendFile(filePath);
 });
 
-app.use('/', router);
+app.use('/main', router);
 app.use('/fitTune-api/user/register', require('./user.routes/register'));
 app.use('/fitTune-api/user/delete', require('./user.routes/delete'));
 app.use('/fitTune-api/user/login', require('./user.routes/login'));
