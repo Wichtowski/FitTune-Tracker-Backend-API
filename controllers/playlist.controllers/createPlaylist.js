@@ -7,14 +7,10 @@ require('dotenv').config();
 
 const createPlaylist = async (req, res) => {
     try {
-        const { userID, playlistName, playlistDescription, exerciseID, unit, creationKey } = req.body;
+        const { id, userID, playlistName, playlistDescription, exerciseID, unit } = req.body;
 
-        if (!userID || !creationKey) {
+        if (!userID || !playlistName) {
             return res.status(400).json({ message: errorMessages.emptyFields });
-        }
-
-        if (creationKey !== process.env.CREATION_STRING) {
-            return res.status(500).json({ message: errorMessages.databaseError });
         }
 
         const userExists = await User.findById(userID);
@@ -26,7 +22,7 @@ const createPlaylist = async (req, res) => {
         const newID = new ObjectId();
 
         if (exerciseID) {
-            if (!ObjectId.isValid(exerciseID)) {
+            if (!isValid(exerciseID)) {
                 return res.status(400).json({ message: errorMessages.exerciseNotExists });
             }
 
@@ -35,8 +31,17 @@ const createPlaylist = async (req, res) => {
                 return res.status(400).json({ message: errorMessages.exerciseNotExists });
             }
         }
+        const playlistId = id || new ObjectId();
+        if (!isValid(playlistId)) {
+            return res.status(400).json({ message: errorMessages.invalidId });
+        }
+        if (id && await Playlist.findById(id)) {
+            return res.status(400).json({ message: errorMessages.playlistExists });
+        }
+
 
         const newPlaylist = new Playlist({
+            _id: id,
             playlistName,
             userID,
             playlistDescription,
@@ -46,7 +51,7 @@ const createPlaylist = async (req, res) => {
 
         await newPlaylist.save();
 
-        return res.status(201).json({ message: successMessages.playlistCreated });
+        return res.status(200).json({ message: successMessages.playlistCreated });
     } catch (err) {
         console.error(err);
         return res.status(500).json({ message: errorMessages.exerciseCreatingError, error: err.message });

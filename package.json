@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "server": "nodemon --ext * index.js"
+    "server": "nodemon --ext * index.js",
+    "test": "cd tests && npx playwright test"
   },
   "keywords": [],
   "author": "",
