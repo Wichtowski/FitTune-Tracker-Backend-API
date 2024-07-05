@@ -12,6 +12,11 @@ const handleNewUser = async (req, res, next) => {
         if (emailDuplicate) {
             return res.status(400).json({ message: errorMessages.emailInUse });
         }
+
+        const isEmailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+        if (!isEmailValid) {
+            return res.status(400).json({ message: errorMessages.emailInvalid });
+        }
         
         const usernameDuplicate = await User.findOne({ username });
         if (usernameDuplicate) {

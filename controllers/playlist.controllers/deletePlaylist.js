@@ -1,4 +1,3 @@
-// src/handlers/playlistHandler.js
 const { Playlist } = require('../../database/index');
 const errorMessages = require('../../helpers/errorMessages');
 const successMessages = require('../../helpers/successMessages');
