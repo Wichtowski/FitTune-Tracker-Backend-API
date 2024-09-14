@@ -1,7 +1,6 @@
 # Node.js
 node_modules/
 npm-debug.log
-config
 
 # Angular
 /dist/
@@ -10,8 +9,12 @@ config
 # MongoDB
 /data/
 
+.vscode
 .env
-/test-results/
-/playwright-report/
-/blob-report/
-/playwright/.cache/
+test-results
+playwright-report
+blob-report
+playwright/.cache/
+
+build
+legacy

@@ -1,10 +1,10 @@
 {
-"scripts": {
-    "server": "cd .. && nodemon --ext * index.js",
-    "test:create": "npx playwright text --project create",
-    "test:read": "npx playwright text --project read",
-    "test:update": "npx playwright text --project update",
-    "test:delete": "npx playwright text --project delete",
-    "test:all": "npm run test:create && npm run test:update && npm run test:read && npm run test:delete"
-  }
+    "scripts": {
+        "server": "cd .. && nodemon --ext * index.js",
+        "test:create": "npx playwright test --project create",
+        "test:read": "npx playwright test --project read",
+        "test:update": "npx playwright test --project update",
+        "test:delete": "npx playwright test --project delete",
+        "test:all": "npm run test:create && npm run test:update && npm run test:read && npm run test:delete"
+    }
 }
