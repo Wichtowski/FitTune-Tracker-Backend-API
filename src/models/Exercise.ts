@@ -1,5 +1,5 @@
 import { Schema, model } from 'mongoose';
-import { IExercise } from '../../interfaces/Exercise';
+import IExercise from '../interfaces/Exercise';
 
 const exerciseSchema = new Schema<IExercise>({
     name: {
@@ -7,7 +7,7 @@ const exerciseSchema = new Schema<IExercise>({
         required: true,
         minlength: 1,
         trim: true,
-        unique: false,
+        unique: true,
     },
     ytVideoID: {
         type: String,
@@ -15,7 +15,7 @@ const exerciseSchema = new Schema<IExercise>({
         unique: true,
     },
     muscleGroup: {
-        type: String,
+        type: [String],
         required: true,
         minlength: 1,
         trim: true,

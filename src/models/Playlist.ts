@@ -1,5 +1,5 @@
 import { Schema, model } from 'mongoose';
-import { IPlaylist } from '../../interfaces/Playlist';
+import IPlaylist from '../interfaces/Playlist';
 import Exercise from './Exercise';
 import User from './User';
 

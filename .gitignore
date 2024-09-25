@@ -16,5 +16,6 @@ playwright-report
 blob-report
 playwright/.cache/
 
+logs
 build
 legacy

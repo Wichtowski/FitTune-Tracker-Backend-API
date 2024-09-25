@@ -1,29 +1,20 @@
 import mongoose from 'mongoose';
-import dotenv from 'dotenv';
-import User from './models/User';
-import Playlist from './models/Playlist';
-import Exercise from './models/Exercise';
-
-dotenv.config();
-export const models = {
-    User: User,
-    Playlist: Playlist,
-    Exercise: Exercise,
-};
 
 class Database {
-    private uri: string;
+    private readonly URI: string;
 
-    constructor(uri?: string) {
-        this.uri = uri || (process.env.CONNECTION_URI as string);
-        if (!this.uri) {
+    constructor() {
+        this.URI = process.env.CONNECTION_URI || 'mongodb://localhost:27017/fitTune';
+        if (!this.URI) {
             throw new Error('Database connection URI is missing in environment variables.');
         }
+        this.connect();
     }
 
-    public async _connect(): Promise<void> {
+    public async connect(): Promise<void> {
         try {
-            await mongoose.connect(this.uri);
+            await mongoose.connect(this.URI);
+            console.log('Database connection successful');
         } catch (err) {
             console.error('Error while attempting to connect to MongoDB:', (err as Error).message);
             throw err;
@@ -40,4 +31,4 @@ class Database {
     }
 }
 
-export default new Database();
+export default Database;

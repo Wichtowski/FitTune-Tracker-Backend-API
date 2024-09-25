@@ -1,6 +1,6 @@
 import mongoose, { Document } from 'mongoose';
 
-export interface IPlaylist extends Document {
+interface IPlaylist extends Document {
     playlistName?: string;
     userID?: mongoose.Types.ObjectId;
     playlistDescription?: string;
@@ -8,13 +8,16 @@ export interface IPlaylist extends Document {
     unit?: 'lbs' | 'kgs';
 }
 
-export interface ExerciseItem {
+interface ExerciseItem {
     exerciseID?: mongoose.Types.ObjectId;
     details?: ExerciseDetails;
 }
 
-export interface ExerciseDetails {
+interface ExerciseDetails {
     sets?: number;
     repetitions?: number;
     weight?: number[];
 }
+
+export default IPlaylist;
+export { ExerciseItem, ExerciseDetails };
