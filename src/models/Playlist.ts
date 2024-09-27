@@ -3,7 +3,7 @@ import IPlaylist from '../interfaces/Playlist';
 import Exercise from './Exercise';
 import User from './User';
 
-const playlistSchema: Schema<IPlaylist> = new Schema({
+const playlistSchema = new Schema<IPlaylist>({
     playlistName: {
         type: String,
         required: false,

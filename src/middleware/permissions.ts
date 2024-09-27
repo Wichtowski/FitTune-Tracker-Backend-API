@@ -2,9 +2,9 @@ import { UserRole } from '../interfaces/User';
 
 class PermissionService {
     private user: UserRole = undefined;
-    private isSuperAdmin: boolean = false;
-    private isAdmin: boolean = false;
-    private isUser: boolean = false;
+    private isSuperAdmin = false;
+    private isAdmin = false;
+    private isUser = false;
 
     constructor(user?: UserRole) {
         this.user = user ? user : this.user;

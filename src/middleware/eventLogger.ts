@@ -43,7 +43,9 @@ class EventLogger {
             const [seconds, nanoseconds] = process.hrtime(startTime); // calculate response time
             const durationMs = (seconds * 1e3 + nanoseconds * 1e-6).toFixed(3);
 
-            const logMessage = `${req.method}\t${req.headers.origin || '-'}\t${req.url}\t${req.ip}\t${res.statusCode} ${res.statusMessage}\t${durationMs}ms`;
+            const logMessage =
+                `${req.method}\t${req.headers.origin || '-'}\t${req.url}\t${req.ip}\t` +
+                `${res.statusCode} ${res.statusMessage}\t${durationMs}ms`;
 
             if (res.statusCode >= 400) {
                 this.logEvents(logMessage, 'errLog.txt');

@@ -7,8 +7,7 @@ dotenv.config();
 class JWTSigner {
     private accessSecret: jwt.Secret;
     constructor() {
-        dotenv.config();
-        const access = process.env.ACCESS_TOKEN_SECRET!;
+        const access = process.env.ACCESS_TOKEN_SECRET ? process.env.ACCESS_TOKEN_SECRET : undefined;
         if (!access) {
             throw new Error('Access token secret is missing');
         }
@@ -26,7 +25,8 @@ class JWTSigner {
         try {
             jwt.verify(token, this.accessSecret);
             return true;
-        } catch (error) {
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        } catch (e) {
             return false;
         }
     }

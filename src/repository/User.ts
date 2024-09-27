@@ -1,4 +1,3 @@
-import { Session } from 'inspector/promises';
 import IUser from '../interfaces/User';
 import User from '../models/User';
 import GenericRepository from './generic';
@@ -12,6 +11,7 @@ class UserRepository extends GenericRepository<IUser> {
     async createUser(data: IUser): Promise<IUser> {
         return User.create(data);
     }
+
     async findByEmail(email: string): Promise<IUser | null> {
         return User.findOne({ email });
     }
@@ -26,11 +26,6 @@ class UserRepository extends GenericRepository<IUser> {
 
     async updatePassword(id: string, password: string): Promise<IUser | null> {
         return User.findByIdAndUpdate(id, { password }, { new: true }).exec();
-    }
-
-    async hashPassword(password: string): Promise<string> {
-        const salt = await bcrypt.genSalt(12);
-        return await bcrypt.hash(password, salt);
     }
 }
 

@@ -1,7 +1,6 @@
 import { Request, Response } from 'express';
 import UserService from '../services/User';
 import IUser, { IPasswordChange, IDeleteUser, ILogUser } from '../interfaces/User';
-import jwt from 'jsonwebtoken';
 
 class UserController {
     private userService: UserService;
@@ -13,7 +12,6 @@ class UserController {
 
     constructor() {
         this.userService = new UserService();
-        this.cookieTokenOptions = this.cookieTokenOptions;
     }
 
     public async createUser(req: Request, res: Response) {

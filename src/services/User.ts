@@ -1,4 +1,12 @@
-import IUser, { IPasswordChange, IDeleteUser, Session, IUserToken, UserRole, ILogUser } from '../interfaces/User';
+import IUser, {
+    IPasswordChange,
+    IDeleteUser,
+    Session,
+    IUserToken,
+    UserRole,
+    ILogUser,
+    IResponseMessage,
+} from '../interfaces/User';
 import UserModel from '../models/User';
 import bcrypt from 'bcrypt';
 import dayjs from 'dayjs';
@@ -15,7 +23,7 @@ class UserService {
         this.JWTSigner = new JWTSigner();
     }
 
-    async createUser(payload: Partial<IUser>) {
+    async createUser(payload: Partial<IUser>): Promise<IResponseMessage> {
         const { username, email, password, birthday, name } = payload;
 
         if (!username || !email || !password || !birthday || !name) {
@@ -49,7 +57,7 @@ class UserService {
             throw new Error('Password cannot contain the username');
         }
 
-        const hasSpecialCharacter = /[!@#$%^&*()_+{}\[\]:;<>,.?~]/.test(password);
+        const hasSpecialCharacter = /[!@#$%^&*()_+{}[\]:;<>,.?~]/.test(password);
         if (!hasSpecialCharacter) {
             throw new Error('Password must contain at least one special character');
         }
@@ -77,7 +85,7 @@ class UserService {
         return { message: 'User created successfully', token: token };
     }
 
-    async renewToken(token: string) {
+    async renewToken(token: string): Promise<IResponseMessage> {
         const isTokenValid = await this.JWTSigner.isJWTValid(token);
         if (!isTokenValid) {
             throw new Error('Invalid token');
@@ -103,7 +111,7 @@ class UserService {
         return { message: 'Token renewed', token: newToken };
     }
 
-    public async loginUser(payload: ILogUser) {
+    public async loginUser(payload: ILogUser): Promise<IResponseMessage> {
         const { login, password } = payload;
 
         if (!login || !password) {
@@ -142,9 +150,16 @@ class UserService {
         return { message: 'Logged in successfully', token: token };
     }
 
-    public async getUsers(): Promise<IUser[]> {
+    public async getUsers() {
         const user = await this.userRepository.getAll();
-        return user;
+        const sanitizedUsers = user.map((user) => {
+            return {
+                username: user.username,
+                email: user.email,
+                name: user.name,
+            };
+        });
+        return sanitizedUsers;
     }
 
     public async changePassword(payload: IPasswordChange) {

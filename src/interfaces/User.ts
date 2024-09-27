@@ -33,6 +33,11 @@ interface ILogUser {
     token?: string;
 }
 
+interface IResponseMessage {
+    message: string;
+    token: string;
+}
+
 interface IPasswordChange {
     email: string;
     password: string;
@@ -47,4 +52,4 @@ interface IDeleteUser {
 }
 
 export default IUser;
-export { Session, IPasswordChange, IDeleteUser, AccountType, UserRole, IUserToken, ILogUser };
+export { Session, IPasswordChange, IDeleteUser, AccountType, UserRole, IUserToken, ILogUser, IResponseMessage };
